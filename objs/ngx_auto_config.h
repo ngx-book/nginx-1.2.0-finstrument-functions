@@ -1,7 +1,7 @@
 #define NGX_CONFIGURE " --with-debug"
 
 #ifndef NGX_DEBUG
-#define NGX_DEBUG  1
+//#define NGX_DEBUG  1
 #endif
 
 

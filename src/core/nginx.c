@@ -3,7 +3,7 @@
  * Copyright (C) Igor Sysoev
  * Copyright (C) Nginx, Inc.
  */
-
+#define MY_DEBUG_MAIN 1
 
 #include <ngx_config.h>
 #include <ngx_core.h>
@@ -205,7 +205,7 @@ main(int argc, char *const *argv)
     ngx_core_conf_t  *ccf;
 
     ngx_debug_init();
-
+    enable_my_debug();
     if (ngx_strerror_init() != NGX_OK) {
         return 1;
     }
@@ -268,7 +268,7 @@ main(int argc, char *const *argv)
     /* TODO */ ngx_max_sockets = -1;
 
     ngx_time_init();
-
+    disable_my_debug();
 #if (NGX_PCRE)
     ngx_regex_init();
 #endif

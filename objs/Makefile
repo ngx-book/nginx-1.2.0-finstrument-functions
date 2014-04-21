@@ -1,6 +1,6 @@
 
 CC =	gcc
-CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Wunused-function -Wunused-variable -Wunused-value -Werror -g 
+CFLAGS =  -pipe  -O0 -W -Wall -Wpointer-arith -Wno-unused-parameter -Wunused-function -Wunused-variable -Wunused-value -Werror -g -finstrument-functions
 CPP =	gcc -E
 LINK =	$(CC)
 
@@ -16,6 +16,7 @@ ALL_INCS = -I src/core \
 
 
 CORE_DEPS = src/core/nginx.h \
+	src/core/my_debug.h \
 	src/core/ngx_config.h \
 	src/core/ngx_core.h \
 	src/core/ngx_log.h \
@@ -81,6 +82,7 @@ CORE_INCS = -I src/core \
 
 
 HTTP_DEPS = src/http/ngx_http.h \
+	src/core/my_debug.h \
 	src/http/ngx_http_request.h \
 	src/http/ngx_http_config.h \
 	src/http/ngx_http_core_module.h \
@@ -98,6 +100,7 @@ HTTP_INCS = -I src/http \
 
 
 objs/nginx:	objs/src/core/nginx.o \
+	objs/src/core/my_debug.o \
 	objs/src/core/ngx_log.o \
 	objs/src/core/ngx_palloc.o \
 	objs/src/core/ngx_array.o \
@@ -206,6 +209,7 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/ngx_modules.o
 
 	$(LINK) -o objs/nginx \
+	objs/src/core/my_debug.o \
 	objs/src/core/nginx.o \
 	objs/src/core/ngx_log.o \
 	objs/src/core/ngx_palloc.o \
@@ -316,7 +320,6 @@ objs/nginx:	objs/src/core/nginx.o \
 	-lpthread -lcrypt -lpcre -lcrypto -lcrypto -lz
 	
 
-
 objs/ngx_modules.o:	$(CORE_DEPS) \
 	objs/ngx_modules.c
 	$(CC) -c $(CFLAGS) $(CORE_INCS) \
@@ -329,6 +332,13 @@ objs/src/core/nginx.o:	$(CORE_DEPS) \
 	$(CC) -c $(CFLAGS) $(CORE_INCS) \
 		-o objs/src/core/nginx.o \
 		src/core/nginx.c
+
+
+objs/src/core/my_debug.o: $(CORE_DEPS) \
+	src/core/my_debug.c
+	$(CC) -c $(CFLAGS) $(CORE_INCS) \
+		-o objs/src/core/my_debug.o \
+		src/core/my_debug.c
 
 
 objs/src/core/ngx_log.o:	$(CORE_DEPS) \
